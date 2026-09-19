@@ -27,6 +27,7 @@ runs/**
 !runs/**/requested_config.json
 !runs/**/diagnostic.json
 !runs/**/gate_trials.jsonl
+!runs/**/audit.json
 !runs/**/full_w1_provenance.json
 
 # Secrets and local configuration

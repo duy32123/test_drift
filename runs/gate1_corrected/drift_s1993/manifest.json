@@ -1,0 +1,873 @@
+{
+  "config": {
+    "alpha": 16.0,
+    "augmentation": "random_crop",
+    "backend": "ns5",
+    "beta": 0.95,
+    "class_order_seed": 1993,
+    "clip_grad": 1.0,
+    "cpu_threads": 4,
+    "damping": 0.03,
+    "data_root": "./data",
+    "delta": 0.02,
+    "device": "auto",
+    "download": false,
+    "effective_batch": 128,
+    "epochs": 10,
+    "eval_batch": 16,
+    "fisher_samples": 8,
+    "gate_tolerance": 1e-06,
+    "gradient_checkpointing": true,
+    "lr": 0.0001,
+    "max_backtracks": 8,
+    "memory_micro_batch": 8,
+    "memory_size": 200,
+    "micro_batch": 8,
+    "model_id": "openai/clip-vit-base-patch16",
+    "model_revision": "57c216476eefef5ab752ec549e440a49ae4ae5f3",
+    "ns_steps": 5,
+    "precision": "bf16",
+    "prompt": "a photo of a {}.",
+    "rank": 16,
+    "replay_samples": 32,
+    "replay_weight": 1.0,
+    "seed": 1993,
+    "shape_scale": true,
+    "solver_maxiter": 500,
+    "split_seed": 17,
+    "synthetic": false,
+    "tasks": 10,
+    "validation_per_class": 50,
+    "warmup_steps": 500,
+    "weight_decay": 0.0,
+    "workers": 0,
+    "z_lower": 0.0
+  },
+  "method": "drift",
+  "class_order": [
+    40,
+    99,
+    72,
+    35,
+    79,
+    28,
+    27,
+    14,
+    65,
+    17,
+    8,
+    76,
+    91,
+    70,
+    46,
+    52,
+    86,
+    10,
+    16,
+    3,
+    90,
+    78,
+    45,
+    94,
+    23,
+    57,
+    22,
+    50,
+    51,
+    56,
+    92,
+    11,
+    80,
+    44,
+    82,
+    36,
+    93,
+    75,
+    42,
+    6,
+    18,
+    62,
+    43,
+    83,
+    71,
+    20,
+    4,
+    5,
+    48,
+    15,
+    64,
+    30,
+    7,
+    24,
+    29,
+    67,
+    63,
+    59,
+    41,
+    0,
+    66,
+    13,
+    84,
+    32,
+    12,
+    89,
+    60,
+    95,
+    96,
+    87,
+    34,
+    97,
+    31,
+    68,
+    9,
+    2,
+    25,
+    1,
+    54,
+    58,
+    61,
+    26,
+    77,
+    55,
+    37,
+    81,
+    98,
+    88,
+    49,
+    85,
+    73,
+    47,
+    53,
+    38,
+    21,
+    19,
+    69,
+    74,
+    39,
+    33
+  ],
+  "task_classes": [
+    [
+      40,
+      99,
+      72,
+      35,
+      79,
+      28,
+      27,
+      14,
+      65,
+      17
+    ],
+    [
+      8,
+      76,
+      91,
+      70,
+      46,
+      52,
+      86,
+      10,
+      16,
+      3
+    ],
+    [
+      90,
+      78,
+      45,
+      94,
+      23,
+      57,
+      22,
+      50,
+      51,
+      56
+    ],
+    [
+      92,
+      11,
+      80,
+      44,
+      82,
+      36,
+      93,
+      75,
+      42,
+      6
+    ],
+    [
+      18,
+      62,
+      43,
+      83,
+      71,
+      20,
+      4,
+      5,
+      48,
+      15
+    ],
+    [
+      64,
+      30,
+      7,
+      24,
+      29,
+      67,
+      63,
+      59,
+      41,
+      0
+    ],
+    [
+      66,
+      13,
+      84,
+      32,
+      12,
+      89,
+      60,
+      95,
+      96,
+      87
+    ],
+    [
+      34,
+      97,
+      31,
+      68,
+      9,
+      2,
+      25,
+      1,
+      54,
+      58
+    ],
+    [
+      61,
+      26,
+      77,
+      55,
+      37,
+      81,
+      98,
+      88,
+      49,
+      85
+    ],
+    [
+      73,
+      47,
+      53,
+      38,
+      21,
+      19,
+      69,
+      74,
+      39,
+      33
+    ]
+  ],
+  "train_examples": 45000,
+  "validation_examples": 5000,
+  "trainable_parameters": 2654208,
+  "parameter_shapes": {
+    "vision.encoder.layers.0.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.0.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.0.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.0.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.0.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.0.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.0.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.0.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.0.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.0.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.0.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.0.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.1.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.1.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.1.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.1.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.1.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.1.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.1.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.1.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.1.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.1.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.1.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.1.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.2.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.2.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.2.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.2.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.2.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.2.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.2.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.2.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.2.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.2.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.2.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.2.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.3.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.3.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.3.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.3.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.3.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.3.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.3.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.3.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.3.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.3.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.3.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.3.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.4.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.4.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.4.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.4.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.4.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.4.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.4.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.4.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.4.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.4.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.4.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.4.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.5.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.5.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.5.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.5.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.5.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.5.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.5.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.5.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.5.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.5.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.5.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.5.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.6.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.6.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.6.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.6.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.6.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.6.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.6.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.6.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.6.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.6.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.6.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.6.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.7.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.7.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.7.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.7.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.7.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.7.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.7.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.7.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.7.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.7.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.7.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.7.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.8.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.8.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.8.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.8.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.8.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.8.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.8.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.8.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.8.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.8.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.8.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.8.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.9.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.9.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.9.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.9.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.9.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.9.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.9.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.9.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.9.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.9.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.9.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.9.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.10.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.10.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.10.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.10.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.10.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.10.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.10.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.10.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.10.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.10.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.10.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.10.mlp.fc2.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.11.self_attn.k_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.11.self_attn.k_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.11.self_attn.v_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.11.self_attn.v_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.11.self_attn.q_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.11.self_attn.q_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.11.self_attn.out_proj.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.11.self_attn.out_proj.lora_B": [
+      768,
+      16
+    ],
+    "vision.encoder.layers.11.mlp.fc1.lora_A": [
+      16,
+      768
+    ],
+    "vision.encoder.layers.11.mlp.fc1.lora_B": [
+      3072,
+      16
+    ],
+    "vision.encoder.layers.11.mlp.fc2.lora_A": [
+      16,
+      3072
+    ],
+    "vision.encoder.layers.11.mlp.fc2.lora_B": [
+      768,
+      16
+    ]
+  },
+  "torch": "2.11.0+cu128",
+  "python": "3.11.9",
+  "packages": {
+    "transformers": "4.57.6",
+    "torchvision": "0.26.0+cu128",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1"
+  },
+  "code_sha256": "db22df15dd0898d441f2366df68d16762227d94c81718ff41261c0618402d6d9",
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 5050 Laptop GPU",
+  "planned_full_run_updates": 3600,
+  "task_limit": 2,
+  "synthetic": false,
+  "debug_subset": false,
+  "protocol_status": "research reimplementation; NOT an exact published-number reproduction",
+  "memory_head": "fixed all-class frozen head; evaluation uses seen classes only",
+  "ns_precision": "FP32",
+  "checkpoint_resume": "completed-task boundary only",
+  "solver_tolerance": 1e-06,
+  "tolerance_contract": "solve_budget feasibility tolerance == accept_step atol == gate_tolerance"
+}

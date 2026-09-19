@@ -1,0 +1,3 @@
+run,method,seed,synthetic,status,completed_tasks,debug_subset,val_avg,val_last,val_bwt,median_old_task_step_s,total_new_images,old_gradient_images,old_fisher_images,old_gate_images,old_replay_images,peak_allocated_gib,rejected_steps
+runs\gate1_corrected\drift_scalar_s1993,drift_scalar,1993,False,pilot_complete,2,False,0.9570000000000001,0.936,-0.018000000000000016,26.930283800000325,90000,72000,2880,558800,0,1.582871437072754,211
+runs\gate1_corrected\drift_s1993,drift,1993,False,pilot_complete,2,False,0.962,0.948,-0.028000000000000025,11.548323449991585,90000,72000,2880,170400,0,1.582871437072754,6

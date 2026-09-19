@@ -1,0 +1,108 @@
+[
+  {
+    "records": 720,
+    "zero_atol": 0.0,
+    "counts": {
+      "no_gate": 360,
+      "accepted": 149,
+      "rejected": 211
+    },
+    "gated_updates": 360,
+    "effective_updates": 149,
+    "noop_fraction_of_gated": 0.0,
+    "silently_mislabelled": 0,
+    "solver_status": {
+      "unconstrained": 6,
+      "active": 4,
+      "recovery": 350
+    },
+    "per_task": {
+      "0": {
+        "no_gate": 360
+      },
+      "1": {
+        "accepted": 149,
+        "rejected": 211
+      }
+    },
+    "undecidable_examples": [],
+    "mislabelled_examples": [],
+    "spectral_modes": {
+      "min": 2304,
+      "max": 2304,
+      "mean": 2304.0
+    },
+    "negative_b_modes": {
+      "min": 1,
+      "max": 60,
+      "mean": 8.930555555555555,
+      "updates_with_any": 360
+    },
+    "run": "runs\\gate1_corrected\\drift_scalar_s1993",
+    "method": "drift_scalar",
+    "logged_z": true,
+    "tolerance": {
+      "gate_tolerance": 1e-06,
+      "solver_tolerance": 1e-06,
+      "solver_default": 1e-08,
+      "matched": true,
+      "ratio": 1.0,
+      "note": "The solver confines the PREDICTED increase to rho + solver_tolerance while the gate accepts a MEASURED increase up to ceiling + gate_tolerance. When these differ the arm forfeits budget it is being scored on; the effect is negligible for rho >> both and dominant for rho at or below the larger one."
+    },
+    "delta": 0.02,
+    "z_lower": 0.0
+  },
+  {
+    "records": 720,
+    "zero_atol": 0.0,
+    "counts": {
+      "no_gate": 360,
+      "accepted": 354,
+      "rejected": 6
+    },
+    "gated_updates": 360,
+    "effective_updates": 354,
+    "noop_fraction_of_gated": 0.0,
+    "silently_mislabelled": 0,
+    "solver_status": {
+      "unconstrained": 6,
+      "active": 113,
+      "recovery": 241
+    },
+    "per_task": {
+      "0": {
+        "no_gate": 360
+      },
+      "1": {
+        "accepted": 354,
+        "rejected": 6
+      }
+    },
+    "undecidable_examples": [],
+    "mislabelled_examples": [],
+    "spectral_modes": {
+      "min": 2304,
+      "max": 2304,
+      "mean": 2304.0
+    },
+    "negative_b_modes": {
+      "min": 0,
+      "max": 72,
+      "mean": 11.422222222222222,
+      "updates_with_any": 359
+    },
+    "run": "runs\\gate1_corrected\\drift_s1993",
+    "method": "drift",
+    "logged_z": true,
+    "tolerance": {
+      "gate_tolerance": 1e-06,
+      "solver_tolerance": 1e-06,
+      "solver_default": 1e-08,
+      "matched": true,
+      "ratio": 1.0,
+      "note": "The solver confines the PREDICTED increase to rho + solver_tolerance while the gate accepts a MEASURED increase up to ceiling + gate_tolerance. When these differ the arm forfeits budget it is being scored on; the effect is negligible for rho >> both and dominant for rho at or below the larger one."
+    },
+    "delta": 0.02,
+    "z_lower": 0.0
+  }
+]
