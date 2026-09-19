@@ -1,0 +1,31 @@
+1. the returned z always satisfies the budget when the problem is feasible
+  [PASS] budget respected  worst violation 0.00e+00 over 300 cases
+2. a loose budget reproduces the Muon-like box optimum
+  [PASS] status  unconstrained
+  [PASS] z = tau on every positive-b mode
+3. a tight budget makes the constraint active (equality)
+  [PASS] status  active
+  [PASS] constraint tight  g=1.977836 rho=1.977836
+4. KKT: z maximises the Lagrangian over the box at the returned mu
+  [PASS] stationarity residual small  max residual 2.30e-11
+5. objective is monotone non-decreasing in the budget
+  [PASS] monotone in rho
+6. a step that HELPS the old task can pay for its own curvature
+  [PASS] free step is NOT feasible here  g(free)=1.500
+  [PASS] recovery status  recovery
+  [PASS] recovery leans on the helpful mode  z0=1.000 max(rest)=0.494
+  [PASS] budget met by recovery  g=-0.2000
+7. genuinely infeasible -> flagged, and the returned step is the least-harm one
+  [PASS] flagged infeasible  infeasible
+  [PASS] least-harm step is z_lo
+8. sign convention against a brute-force quadratic model
+  [PASS] a^T z == -<grad_old, Delta P>  -2.585352e-01 vs -2.585352e-01
+9. coords() matches the explicit u_i^T G v_i
+  [PASS] coords correct
+10. end-to-end on a tiny module: momentum, SVD rank, apply/backtrack
+  [PASS] thin rank <= min(dim)  r=9
+  [PASS] apply moves the weight
+  [PASS] backtrack(0) restores exactly  residual 0.00e+00
+  [PASS] curvature is psd
+
+ALL PASS

@@ -1,0 +1,43 @@
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local datasets and downloaded model artifacts
+data/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Experiment outputs: retain compact metadata/results only
+runs/**
+!runs/**/
+!runs/**/summary.json
+!runs/**/manifest.json
+!runs/**/comparison.csv
+!runs/**/resolved.yaml
+!runs/**/requested_config.json
+!runs/**/diagnostic.json
+!runs/**/gate_trials.jsonl
+!runs/**/full_w1_provenance.json
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Editors and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

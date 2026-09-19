@@ -1,0 +1,129 @@
+{
+  "diagnostic_only": true,
+  "status": "diagnostic_complete",
+  "source_run": "C:\\Users\\PC\\Documents\\drift-cil-v0.2\\runs\\pilot\\scalar_s1993",
+  "source_checkpoint": "C:\\Users\\PC\\Documents\\drift-cil-v0.2\\runs\\pilot\\scalar_s1993\\last.pt",
+  "completed_tasks_at_start": 1,
+  "initial_update": 360,
+  "max_additional_updates": 60,
+  "delta": 0.02,
+  "gate_tolerance": 1e-06,
+  "original_max_backtracks": 8,
+  "source_code_sha256": {
+    "__init__.py": "6319fe6420d01c0d5fe87a408f0872923405b937a54d31a2fb8b0b0459eff59d",
+    "allocator.py": "cf937caad548b1d0501f6d763d64e5bc207cd3e240f12e444a708f6673d7bd3d",
+    "data.py": "d540f8cffe4a554d9ff0c5d0a7e477653cfa33bc94866d80fc0c75d45a623e00",
+    "memory.py": "83b916318afa0314107c82709664c6430351beb174f741cc443ea45d43b8a143",
+    "model.py": "092636b91a43ad5527fc821ca773f5f929eb3ce5e5ea9ccc3787559cd9dc7876",
+    "optim.py": "a31a07fb2918a59e652bb1ce65b20768ce31c685b7a808d11a9f38e43c67d9de",
+    "runner.py": "5105f8b6a2a5f611b4d5dced957d3dae72db6901839932e0519a28213d65994e"
+  },
+  "note": "Replayed from a task boundary. Lost in-task weights cannot be recovered from text logs.",
+  "first_rejection": {
+    "update": 369,
+    "before_loss": 0.2931924713484477,
+    "ceiling": 0.29320106711544214,
+    "headroom": 8.595766994412557e-06,
+    "outcome": {
+      "accepted_scale": 0.0,
+      "backtracks": 9,
+      "memory_after": 0.2931924713484477,
+      "within_budget": true,
+      "accept_status": "rejected"
+    },
+    "trials": [
+      {
+        "scale": 1.0,
+        "memory_loss": 0.2979334794508759,
+        "loss_change": 0.004741008102428168,
+        "excess_over_ceiling": 0.0047324123354337555,
+        "finite": true,
+        "seconds": 8.30801590000192
+      },
+      {
+        "scale": 0.5,
+        "memory_loss": 0.29553947172826156,
+        "loss_change": 0.002347000379813835,
+        "excess_over_ceiling": 0.0023384046128194225,
+        "finite": true,
+        "seconds": 8.055323200002022
+      },
+      {
+        "scale": 0.25,
+        "memory_loss": 0.2943611794617027,
+        "loss_change": 0.0011687081132549793,
+        "excess_over_ceiling": 0.0011601123462605667,
+        "finite": true,
+        "seconds": 8.214499699999578
+      },
+      {
+        "scale": 0.125,
+        "memory_loss": 0.2937753830337897,
+        "loss_change": 0.0005829116853419691,
+        "excess_over_ceiling": 0.0005743159183475566,
+        "finite": true,
+        "seconds": 8.31913319999876
+      },
+      {
+        "scale": 0.0625,
+        "memory_loss": 0.29348390953964554,
+        "loss_change": 0.00029143819119781256,
+        "excess_over_ceiling": 0.0002828424242034,
+        "finite": true,
+        "seconds": 8.303577900005621
+      },
+      {
+        "scale": 0.03125,
+        "memory_loss": 0.2933377777226269,
+        "loss_change": 0.00014530637417919934,
+        "excess_over_ceiling": 0.00013671060718478678,
+        "finite": true,
+        "seconds": 8.143018100003246
+      },
+      {
+        "scale": 0.015625,
+        "memory_loss": 0.29326526826480404,
+        "loss_change": 7.279691635631025e-05,
+        "excess_over_ceiling": 6.420114936189769e-05,
+        "finite": true,
+        "seconds": 8.108350700000301
+      },
+      {
+        "scale": 0.0078125,
+        "memory_loss": 0.2932288966840133,
+        "loss_change": 3.642533556558192e-05,
+        "excess_over_ceiling": 2.782956857116936e-05,
+        "finite": true,
+        "seconds": 8.123034399999597
+      },
+      {
+        "scale": 0.00390625,
+        "memory_loss": 0.2932106328662485,
+        "loss_change": 1.816151780076325e-05,
+        "excess_over_ceiling": 9.565750806350692e-06,
+        "finite": true,
+        "seconds": 9.91468359999999
+      }
+    ]
+  },
+  "repeated_baseline_loss": 0.2931924713484477,
+  "repeated_baseline_abs_difference": 0.0,
+  "additional_trials": [
+    {
+      "scale": 0.001953125,
+      "memory_loss": 0.29320133448345587,
+      "loss_change": 8.863135008141398e-06,
+      "excess_over_ceiling": 2.6736801372884145e-07,
+      "finite": true,
+      "within_budget": true,
+      "recovery": false,
+      "parameter_step_l2": 3.7740011816495144e-05,
+      "nonzero_step": true,
+      "seconds": 10.539470099996834
+    }
+  ],
+  "finding": "smaller_nonzero_step_is_feasible",
+  "baseline_repeatability_warning": false,
+  "gated_updates_observed": 10,
+  "elapsed_seconds": 432.0685855999982
+}

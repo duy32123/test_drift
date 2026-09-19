@@ -1,0 +1,2 @@
+run,method,seed,synthetic,status,completed_tasks,debug_subset,val_avg,val_last,val_bwt,median_old_task_step_s,total_new_images,old_gradient_images,old_fisher_images,old_gate_images,old_replay_images,peak_allocated_gib,rejected_steps
+C:\Users\PC\Documents\drift-cil-v0.2\runs\pilot\replay_s1993,replay,1993,False,pilot_complete,2,False,0.9495,0.923,-0.118,2.0658308000020043,90000,0,0,0,11520,1.553070068359375,0

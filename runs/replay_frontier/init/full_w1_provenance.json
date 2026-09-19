@@ -1,0 +1,12 @@
+{
+  "source": "runs\\pilot\\replay_s1993\\task_01.pt",
+  "source_sha256": "23ffd351fb83ba649c46346252f8783783192d362e880f2fb77218d6e2def5f8",
+  "changed": {
+    "replay_samples": [
+      32,
+      200
+    ],
+    "replay_weight": 1.0
+  },
+  "completed_tasks": 1
+}

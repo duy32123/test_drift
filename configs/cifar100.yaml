@@ -1,0 +1,44 @@
+# Development configuration. Unspecified paper settings are explicit choices,
+# not claimed recovered values. Read PROTOCOL.md before reporting comparisons.
+synthetic: false
+model_id: openai/clip-vit-base-patch16
+model_revision: main
+data_root: ./data
+download: false
+device: auto
+seed: 1993
+class_order_seed: 1993
+split_seed: 17
+tasks: 10
+validation_per_class: 50
+augmentation: random_crop
+prompt: "a photo of a {}."
+rank: 16
+alpha: 16.0
+gradient_checkpointing: true
+precision: bf16
+backend: ns5
+ns_steps: 5
+shape_scale: true
+beta: 0.95
+lr: 0.0001
+weight_decay: 0.0
+warmup_steps: 500
+epochs: 10
+micro_batch: 8
+effective_batch: 128
+clip_grad: 1.0
+eval_batch: 16
+workers: 0
+cpu_threads: 4
+memory_size: 200
+memory_micro_batch: 8
+fisher_samples: 8
+damping: 0.03
+delta: 0.02
+z_lower: 0.0
+solver_maxiter: 500
+max_backtracks: 8
+gate_tolerance: 0.000001
+replay_samples: 32
+replay_weight: 1.0

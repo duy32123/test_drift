@@ -1,0 +1,10 @@
+.................s....                                                   [100%]
+============================= slowest 5 durations ==============================
+3.72s call     tests/test_cifar_queue.py::test_queue_skip_extend_and_config_guard
+1.51s call     tests/test_integration.py::test_huggingface_clip_adapter_path_without_download
+1.07s call     tests/test_cifar_queue.py::test_cifar_transform_and_debug_split_keep_original_indices
+0.97s call     tests/test_allocator.py::test_random_feasibility_and_independent_slsqp_objective
+0.16s call     tests/test_integration.py::test_task_boundary_resume_matches_uninterrupted
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_steps.py:10: CUDA unavailable
+21 passed, 1 skipped in 9.30s

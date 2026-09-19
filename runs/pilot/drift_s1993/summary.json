@@ -1,0 +1,32 @@
+{
+  "status": "pilot_complete",
+  "synthetic": false,
+  "debug_subset": false,
+  "method": "drift",
+  "completed_tasks": 2,
+  "validation_avg": 0.964,
+  "validation_last": 0.952,
+  "validation_bwt": -0.026000000000000023,
+  "stages": [
+    {
+      "accuracy": 0.976,
+      "per_task": [
+        0.976
+      ],
+      "split": "validation"
+    },
+    {
+      "accuracy": 0.952,
+      "per_task": [
+        0.95,
+        0.954
+      ],
+      "split": "validation"
+    }
+  ],
+  "updates": 720,
+  "elapsed_seconds": 5378.8471448000055,
+  "median_step_seconds": 5.8349061499975505,
+  "peak_allocated_gib": 1.582871437072754,
+  "peak_reserved_gib": 1.783203125
+}
