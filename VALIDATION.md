@@ -1,10 +1,27 @@
 # Phần đã kiểm và phần còn phải chạy trên máy đích
 
-## Môi trường kiểm tại thời điểm đóng gói
+## Kiểm chứng hiện tại: shared task-A fork
+
+- Python 3.11.9, PyTorch 2.11.0+cu128, CUDA available trên máy Windows hiện tại.
+- `pytest -q --basetemp=.pytest_cache/paired_verification_final`: **47 passed**.
+- Bao gồm tests audit/scalar/tolerance, sáu method trên pipeline synthetic,
+  kiểm tra khôi phục nguyên adapter, momentum, memory, anchors, RNG và task-A metrics.
+- Paired synthetic chạy task A một lần, fork hai nhánh qua task B, xác minh cùng
+  SHA-256 checkpoint cha, tolerance khớp, audit và checksum mọi artifact.
+- Resume thường vẫn chặn đổi method; fork chặn method khác cặp drift/drift_scalar,
+  config khác và checkpoint thiếu source hash. Thư mục paired đã tồn tại bị từ chối.
+- Tái audit hai Gate 1 cũ từ log cục bộ khớp đúng JSON đã lưu. Hash khác nhau giữa
+  Windows và Git do CRLF/LF; xem `GATE1_PROVENANCE.md`.
+- Chưa chạy CIFAR ghép cặp mới, chưa xác thực lại accuracy 94.8%/93.6% từ checkpoint
+  chung. Synthetic không thay thế kiểm chứng GPU training đầy đủ hay evidence paper.
+
+## Lịch sử: môi trường tại thời điểm đóng gói ban đầu
+
+Các mục dưới đây ghi lại trạng thái của bản đóng gói cũ, không phải lần test hiện tại.
 
 - Python 3.12.14, PyTorch 2.14.0+cpu, torchvision 0.29.0+cpu.
 - transformers 4.57.6. Không có CUDA/GPU trong môi trường kiểm.
-- Xem `TEST_RESULTS.txt` cho output pytest của đúng bản đóng gói.
+- Lần đóng gói cũ: 21 passed, 1 skipped (CUDA unavailable).
 
 ## Đã thực thi
 

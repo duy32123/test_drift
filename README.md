@@ -1,12 +1,13 @@
 # Drift-CIL v0.2 — bộ chạy nghiên cứu cho RTX 5050 8 GB
 
 LoRA4CIL trên CLIP ViT-B/16 + CIFAR-100, 10 task, backbone và text head đóng băng.
-Đây là **research reimplementation**, chưa phải tái lập chính xác Table 7 và chưa
-có kết quả CIFAR/GPU. Các kiểm tra offline không phải bằng chứng method thắng.
+Đây là **research reimplementation**, chưa phải tái lập chính xác Table 7.
+Các pilot CIFAR/GPU nằm trong `runs/`; Gate 1 cũ chưa dùng checkpoint task A chung.
+Các kiểm tra offline không phải bằng chứng method thắng.
 
 ## Những gì đã có
 
-- Năm nhánh: `adamw`, `muon`, `scalar`, `replay`, `drift`.
+- Sáu nhánh: `adamw`, `muon`, `scalar`, `replay`, `drift`, `drift_scalar`.
 - Muon NS5 và các nhánh dùng cùng EMA/Nesterov, normalization, shape scaling,
   dtype FP32 của NS và số vòng lặp. Có backend `polar` cho đối chiếu riêng.
 - Thin SVD trên **bước factor thực sự**, đã gồm LR, NS amplitudes và scaling.
@@ -59,7 +60,7 @@ Lưu môi trường thành công để tái lập:
 ```
 
 Tiny model + dữ liệu sinh chỉ kiểm luồng train/memory/checkpoint. Không báo những
-accuracy này trong bảng benchmark. Các test tích hợp chạy cả năm nhánh và kiểm
+accuracy này trong bảng benchmark. Các test tích hợp chạy cả sáu nhánh và kiểm
 resume cho kết quả giống hệt một run không ngắt.
 
 ## 3. Profile CLIP thật trước khi chọn micro-batch
@@ -122,6 +123,30 @@ Dùng `--max-updates 40` để dừng sớm khi debug. Run dừng giữa task đ
 curve của profile như cấu hình chính.
 
 ## 5. Tune, khóa cấu hình, rồi chạy thêm seed
+
+Để so `drift` với scalar restriction `drift_scalar`, dùng checkpoint task A chung:
+
+```powershell
+.\.venv\Scripts\python.exe run_paired.py --config configs/smoke.yaml --output runs/paired_smoke
+.\.venv\Scripts\python.exe run_paired.py --config configs/cifar100.yaml --output runs/gate1_paired
+```
+
+Mỗi lệnh cần thư mục mới. Script train task A một lần, fork hai nhánh đến hết task B,
+giữ toàn bộ state checkpoint (momentum, memory/anchors và RNG), cùng lịch LR/config.
+`run_pilot.py` vẫn là hàng đợi các run độc lập. `scalar` chỉ backtrack bước cơ sở;
+`drift_scalar` giải cùng bài toán ngân sách với `drift`, giới hạn `z = c*1`.
+
+`run_paired.py` lưu `source/`, `provenance.json`, `checksums.json`, checkpoint chung,
+step logs, manifest, summary, comparison và audit. Log mỗi nhánh chỉ gồm task B;
+log task A nằm trong `task_a/`. Summary hai nhánh bao gồm cùng metrics task A;
+thời gian riêng mỗi nhánh không bao gồm chi phí train task A chung.
+Giữ toàn bộ thư mục làm artifact để người khác tái audit; checkpoint/source snapshot
+không tự động được đưa vào Git. Checksum xác minh artifact, không chứng minh chất lượng method.
+`--fork-from` chỉ nhận checkpoint task A mới có source hash LF khớp; resume thường
+vẫn yêu cầu cùng method. Chỉ nạp checkpoint tin cậy.
+
+Hash module mới có trường `code_sha256_lf` chuẩn hóa CRLF → LF để đối chiếu Git.
+Xem `GATE1_PROVENANCE.md` về hash và giới hạn của hai run Gate 1 cũ.
 
 - Train chỉ dùng training split. Mặc định tách 50 ảnh/class làm validation,
   không lấy memory/Fisher/acceptance từ validation hoặc test.

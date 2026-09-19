@@ -29,6 +29,9 @@ runs/**
 !runs/**/gate_trials.jsonl
 !runs/**/audit.json
 !runs/**/full_w1_provenance.json
+# Archived Gate 1 logs for independent re-audit
+!runs/gate1_corrected/drift_s1993/steps.jsonl
+!runs/gate1_corrected/drift_scalar_s1993/steps.jsonl
 
 # Secrets and local configuration
 .env

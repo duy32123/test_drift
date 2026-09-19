@@ -11,7 +11,7 @@ from drift_cil.model import TinyClassifier
 ROOT=Path(__file__).resolve().parents[1]
 
 
-@pytest.mark.parametrize("method",["adamw","muon","scalar","replay","drift"])
+@pytest.mark.parametrize("method",["adamw","muon","scalar","replay","drift","drift_scalar"])
 def test_three_task_offline_training(tmp_path,method):
     cfg=yaml.safe_load((ROOT/"configs/smoke.yaml").read_text())
     result=run(cfg,tmp_path/method,method,print_every=10000)

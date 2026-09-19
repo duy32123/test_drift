@@ -65,7 +65,14 @@ evaluation dùng tất cả lớp đã thấy. Xem PROTOCOL.md về giả địn
 
 - `muon`: áp dụng trực tiếp cùng bước cơ sở, không đọc memory.
 - `scalar`: cùng memory, anchors và measured-loss gate; chỉ co toàn bộ bước bằng
-  một scalar. Đây là đối chứng chính để kiểm giá trị của phân bổ từng mode.
+  một scalar qua backtracking, không giải bài toán Fisher allocation.
+- `drift_scalar`: đối chứng trực tiếp của per-mode allocation, giới hạn `z = c*1`.
+  Với `b_s = 1^T b`, `a_s = 1^T a`, `C_s = 1^T C 1`, giải
+  `max b_s*c` với `-a_s*c + 0.5*C_s*c^2 <= rho + tolerance` và `z_lower <= c <= 1`.
+  `C_s` giữ toàn bộ cross-mode terms. Hai nhánh dùng cùng `solve_budget` và
+  cùng `gate_tolerance` (mặc định `1e-6`) cho solver feasibility và measured-loss gate.
+  Đây là đồng bộ tolerance; predicted loss vẫn là proxy của measured loss.
+  So sánh ghép cặp dùng chung checkpoint task A qua `run_paired.py`.
 - `replay`: trộn gradient dữ liệu cũ với gradient mới trước cùng Muon.
 - `adamw`: baseline optimizer trên cùng các factor.
 

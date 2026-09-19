@@ -85,17 +85,50 @@ def atomic_save(obj,path):
     os.replace(tmp,path)
 
 
-def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, print_every=10):
+def code_hash():
+    """Portable source digest: sorted module bytes with LF line endings."""
+    return hashlib.sha256(b"".join(p.read_bytes().replace(b"\r\n", b"\n")
+        for p in sorted(Path(__file__).parent.glob("*.py")))).hexdigest()
+
+
+def file_hash(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, print_every=10,
+        fork_from=None):
     output = Path(output)
     if method not in METHODS:
         raise ValueError(f"Unknown method: {method}")
+    if resume and fork_from:
+        raise ValueError("resume and fork_from are mutually exclusive")
+    if fork_from and output.exists() and any(output.iterdir()):
+        raise FileExistsError("Fork requires a new, empty output directory")
     if (output/"manifest.json").exists() and not resume:
         raise FileExistsError(f"{output} already contains a run; choose another output or --resume")
     output.mkdir(parents=True,exist_ok=True)
-    checkpoint = torch.load(resume,map_location="cpu",weights_only=False) if resume else None
+    source = fork_from or resume
+    checkpoint = torch.load(source,map_location="cpu",weights_only=False) if source else None
+    fork_provenance = None
     if checkpoint:
-        if checkpoint["method"] != method:
+        if fork_from:
+            if method not in ("drift", "drift_scalar") or checkpoint["method"] not in ("drift", "drift_scalar"):
+                raise ValueError("Task-A fork only supports drift and drift_scalar")
+            if checkpoint["completed_tasks"] != 1 or len(checkpoint["stage_metrics"]) != 1:
+                raise ValueError("Fork requires exactly one completed task")
+            if checkpoint.get("code_sha256_lf") != code_hash():
+                raise ValueError("Fork checkpoint source hash differs or is missing; create a fresh task A")
+            fork_provenance = {"checkpoint_sha256": file_hash(source),
+                "source_method": checkpoint["method"], "completed_tasks": 1,
+                "update": checkpoint["update"], "code_sha256_lf": checkpoint["code_sha256_lf"]}
+        elif checkpoint["method"] != method:
             raise ValueError("Cannot resume with a different method")
+        else:
+            fork_provenance = checkpoint.get("fork_provenance")
         saved = checkpoint["config"]
         runtime_keys = {"device","data_root","download"}
         for key in sorted((set(cfg)|set(saved)) - runtime_keys - {"model_revision"}):
@@ -172,6 +205,7 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
     def amp():
         return torch.autocast("cuda",dtype=torch.bfloat16) if use_amp else contextlib.nullcontext()
     manifest = {"config":cfg,"method":method,"class_order":data.order,
+        "code_sha256_lf":code_hash(), "fork_provenance":fork_provenance,
         "task_classes":data.task_classes,"train_examples":len(data.train_indices),
         "validation_examples":len(data.val_indices),"trainable_parameters":sum(p.numel() for n,p in parameters),
         "parameter_shapes":{n:list(p.shape) for n,p in parameters},"torch":torch.__version__,
@@ -190,6 +224,7 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
     (output/"manifest.json").write_text(json.dumps(manifest,indent=2),encoding="utf-8")
     def save(completed,path):
         atomic_save({"config":cfg,"method":method,"adapters":trainable_state(model),
+            "code_sha256_lf":manifest["code_sha256_lf"], "fork_provenance":fork_provenance,
             "momentum":stepper.state_dict(),"adam":adam.state_dict() if adam else None,
             "memory":memory.state_dict(),"completed_tasks":completed,"update":update,
             "stage_metrics":stage_metrics,"torch_rng":torch.get_rng_state(),
@@ -197,7 +232,7 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
             "numpy_rng":np.random.get_state(),"python_rng":random.getstate(),
             "label_rng":label_rng.get_state()},path)
     if not resume:
-        save(0,output/"last.pt")
+        save(start_task,output/"last.pt")
     else:
         # Resume is from a task boundary: preserve, then remove partial later-task logs.
         log_path = output/"steps.jsonl"
@@ -344,6 +379,7 @@ def main():
     parser.add_argument("--task-limit",type=int)
     parser.add_argument("--max-updates",type=int)
     parser.add_argument("--resume")
+    parser.add_argument("--fork-from", help="Trusted shared task-A checkpoint; new output required")
     parser.add_argument("--download",action="store_true")
     parser.add_argument("--print-every",type=int,default=10)
     for name in ("micro-batch","effective-batch","seed","epochs","memory-size","fisher-samples"):
@@ -359,7 +395,8 @@ def main():
         if value is not None: cfg[key]=value
     if args.download: cfg["download"]=True
     try:
-        run(cfg,args.output,args.method,args.task_limit,args.max_updates,args.resume,args.print_every)
+        run(cfg,args.output,args.method,args.task_limit,args.max_updates,args.resume,args.print_every,
+            fork_from=args.fork_from)
     except torch.cuda.OutOfMemoryError:
         print("CUDA OOM: lower micro_batch and memory_micro_batch; keep effective_batch fixed. "
               "No task-boundary checkpoint is overwritten by this failure.",file=sys.stderr)
