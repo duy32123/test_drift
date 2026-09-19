@@ -19,8 +19,11 @@ from .data import DataBundle, IndexedImages
 from .model import CLIPClassifier, TinyClassifier, trainable_state, restore_trainable
 from .memory import Memory, memory_loss, fisher_scores
 from .optim import MatrixSteps, SpectralProposal, Transaction, accept_step
+from .audit import classify_record
 
-METHODS = ("adamw","muon","scalar","replay","drift")
+# drift_scalar: the SAME budget, solver, tolerance and gate as drift, restricted
+# to one global amplitude z = c*1. It is the control for per-mode allocation.
+METHODS = ("adamw","muon","scalar","replay","drift","drift_scalar")
 
 
 def seed_all(seed):
@@ -139,7 +142,10 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
                           ns_steps=cfg.get("ns_steps",5),shape_scale=cfg.get("shape_scale",True))
     adam = torch.optim.AdamW([p for n,p in parameters],lr=cfg["lr"],
              weight_decay=cfg.get("weight_decay",0.)) if method == "adamw" else None
-    capacity = cfg["memory_size"] if method in ("scalar","replay","drift") else 0
+    gate_tolerance = float(cfg.get("gate_tolerance",1e-6))
+    if gate_tolerance < 0:
+        raise ValueError("gate_tolerance must be nonnegative")
+    capacity = cfg["memory_size"] if method in ("scalar","replay","drift","drift_scalar") else 0
     memory = Memory(capacity,cfg["seed"])
     label_rng = torch.Generator(device=device).manual_seed(cfg["seed"]+191)
     start_task,update,stage_metrics = 0,0,[]
@@ -178,7 +184,9 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
         "debug_subset":data.debug_subset,
         "protocol_status":"research reimplementation; NOT an exact published-number reproduction",
         "memory_head":"fixed all-class frozen head; evaluation uses seen classes only",
-        "ns_precision":"FP32","checkpoint_resume":"completed-task boundary only"}
+        "ns_precision":"FP32","checkpoint_resume":"completed-task boundary only",
+        "solver_tolerance":gate_tolerance,
+        "tolerance_contract":"solve_budget feasibility tolerance == accept_step atol == gate_tolerance"}
     (output/"manifest.json").write_text(json.dumps(manifest,indent=2),encoding="utf-8")
     def save(completed,path):
         atomic_save({"config":cfg,"method":method,"adapters":trainable_state(model),
@@ -245,9 +253,9 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
                 else:
                     new_grad={n:p.grad.detach().clone() if p.grad is not None else torch.zeros_like(p) for n,p in parameters}
                     directions=stepper.directions(lr)
-                    if method in ("scalar","drift") and len(memory):
+                    if method in ("scalar","drift","drift_scalar") and len(memory):
                         ids=memory.indices()
-                        if method=="drift":
+                        if method in ("drift","drift_scalar"):
                             before,old_grad=memory_loss(model,data,ids,device,cfg["memory_micro_batch"],True,parameters)
                             old_reads["gradient"]=len(ids)
                             proposal=SpectralProposal(parameters,directions)
@@ -256,9 +264,16 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
                                 scores=fisher_scores(model,data,fi,device,proposal,label_rng)
                                 old_reads["fisher"]=len(fi)
                                 b,a=proposal.coordinates(new_grad),proposal.coordinates(old_grad)
-                                z,diagnostics=proposal.allocate(b,a,scores,
+                                # ONE tolerance for the solver and the gate. Measured
+                                # effect at realistic shapes: ~1.00x. It matters only
+                                # when rho <= 1e-6 AND a.z ~ 0. Kept because a run
+                                # cannot be reasoned about under two budgets, NOT
+                                # because it is expected to move any number.
+                                allocator=(proposal.allocate_scalar if method=="drift_scalar"
+                                           else proposal.allocate)
+                                z,diagnostics=allocator(b,a,scores,
                                     memory.anchor+cfg["delta"]-before,cfg["damping"],cfg.get("z_lower",0.),
-                                    cfg.get("solver_maxiter",500))
+                                    cfg.get("solver_maxiter",500),gate_tolerance)
                                 directions=proposal.directions(z)
                                 diagnostics["spectral_modes"]=proposal.size
                                 diagnostics["negative_b_modes"]=int(np.sum(b<0))
@@ -270,10 +285,14 @@ def run(cfg, output, method, task_limit=None, max_updates=None, resume=None, pri
                             return memory_loss(model,data,ids,device,cfg["memory_micro_batch"])
                         transaction=Transaction(parameters,directions)
                         accepted=accept_step(transaction,gate_loss,before,memory.anchor+cfg["delta"],
-                            max_backtracks=cfg.get("max_backtracks",8),atol=cfg.get("gate_tolerance",1e-6))
+                            max_backtracks=cfg.get("max_backtracks",8),atol=gate_tolerance)
                         diagnostics.update(accepted)
                         diagnostics.update(memory_before=before,memory_anchor=memory.anchor,
                                            budget_ceiling=memory.anchor+cfg["delta"])
+                        # accept_status only says the MEASURED loss stayed under the
+                        # ceiling, which a zero step passes for free. Record what the
+                        # update actually did, recomputed from the raw fields.
+                        diagnostics["outcome"]=classify_record(diagnostics)[0]
                     else:
                         Transaction(parameters,directions).apply()
                 synchronize(device)

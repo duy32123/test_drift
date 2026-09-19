@@ -80,10 +80,16 @@ def solve_budget(b, a, curvature, rho, lower=0.0, upper=1.0,
     lo, hi = 0., 1.
     candidate = minimum.copy()
     residual, success = 0., True
+    # ONE budget everywhere below. The bisection used to target a strict `rho`
+    # while the caller's feasibility check, the final guard and accept_step all
+    # used `rho + tolerance`; the step returned was then held to a budget the
+    # gate did not enforce, which matters once rho falls to the order of
+    # `tolerance` -- exactly where a non-renewing budget spends its time.
+    ceiling = rho + tolerance
     for _ in range(48):
         z, residual, success = inner(hi, candidate)
         candidate = z
-        if cost(z) <= rho + tolerance:
+        if cost(z) <= ceiling:
             break
         hi *= 4.
     else:
@@ -92,12 +98,12 @@ def solve_budget(b, a, curvature, rho, lower=0.0, upper=1.0,
     for _ in range(bisections):
         mid = (lo + hi) / 2
         z, residual, success = inner(mid, feasible)
-        if cost(z) > rho:
+        if cost(z) > ceiling:
             lo = mid
         else:
             hi, feasible = mid, z
     z, residual, success = inner(hi, feasible)
-    if cost(z) > rho + tolerance:
+    if cost(z) > ceiling:
         z = feasible
     status = "recovery" if rho < 0 else "active"
     if residual > 1e-5:

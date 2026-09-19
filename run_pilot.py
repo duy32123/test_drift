@@ -12,7 +12,7 @@ import time
 import yaml
 
 ROOT=Path(__file__).resolve().parent
-METHODS=("adamw","muon","scalar","replay","drift")
+METHODS=("adamw","muon","scalar","replay","drift","drift_scalar")
 
 
 def write_json(path,value):

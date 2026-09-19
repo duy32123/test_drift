@@ -108,14 +108,60 @@ class SpectralProposal:
         return {name: (us * torch.as_tensor(z[sl], device=p.device, dtype=us.dtype)) @ vh
                 for name,p,us,vh,sl in self.parts}
 
-    def allocate(self, b, a, scores, rho, damping=.03, lower=0., maxiter=500):
-        if self.size == 0:
-            return np.empty(0), {"status":"empty", "predicted_change":0., "objective":0.}
+    def _curvature(self, scores, damping):
         scores = np.asarray(scores, dtype=np.float64).reshape(-1, self.size)
         diag = np.zeros(self.size)
         for *_, sl in self.parts:
             diag[sl] = damping * max(float(np.mean(scores[:,sl] ** 2)), 1e-16)
-        return solve_budget(b, a, Curvature(scores,diag), rho, lower=lower, maxiter=maxiter)
+        return Curvature(scores, diag)
+
+    @staticmethod
+    def _annotate(z, info):
+        """Log the allocation itself. Without this, steps.jsonl cannot distinguish
+        a zero step from a real one after the fact; see drift_cil.audit."""
+        z = np.asarray(z, dtype=np.float64)
+        info["z_inf"] = float(np.max(np.abs(z))) if z.size else 0.
+        info["z_l1"] = float(np.sum(np.abs(z)))
+        info["z_nonzero"] = int(np.count_nonzero(z))
+        return z, info
+
+    def allocate(self, b, a, scores, rho, damping=.03, lower=0., maxiter=500,
+                 tolerance=1e-8):
+        """`tolerance` MUST be the gate's atol. A solver held to rho+1e-8 while the
+        gate enforces ceiling+1e-6 forfeits budget the arm is scored on."""
+        if self.size == 0:
+            return np.empty(0), {"status":"empty", "predicted_change":0., "objective":0.,
+                                 "z_inf":0., "z_l1":0., "z_nonzero":0}
+        return self._annotate(*solve_budget(b, a, self._curvature(scores, damping), rho,
+                                            lower=lower, maxiter=maxiter, tolerance=tolerance))
+
+    def allocate_scalar(self, b, a, scores, rho, damping=.03, lower=0., maxiter=500,
+                        tolerance=1e-8):
+        """The SAME budget, restricted to one global amplitude z = c * 1.
+
+        This is the control the per-mode allocation has to beat. The restriction
+        is a 1-D problem in c, NOT a re-solve with a diagonal curvature:
+
+            max_c  c * (1.b)   s.t.  -(1.a) c + .5 c^2 (1.C.1) <= rho,  lower <= c <= 1
+
+        1.C.1 keeps every cross-mode term and costs one matvec against the stored
+        scores. Solved by the same `solve_budget`, so both arms share this
+        tolerance, this status vocabulary and -- in the runner -- this gate.
+        """
+        if self.size == 0:
+            return np.empty(0), {"status":"empty", "predicted_change":0., "objective":0.,
+                                 "z_inf":0., "z_l1":0., "z_nonzero":0, "scalar_c":0.}
+        curvature = self._curvature(scores, damping)
+        ones = np.ones(self.size)
+        b_s = float(np.sum(np.asarray(b, dtype=np.float64)))
+        a_s = float(np.sum(np.asarray(a, dtype=np.float64)))
+        c_s = float(ones @ curvature.mv(ones))
+        collapsed = Curvature(np.array([[np.sqrt(max(c_s, 0.))]]), np.zeros(1))
+        c, info = solve_budget(np.array([b_s]), np.array([a_s]), collapsed, rho,
+                               lower=lower, maxiter=maxiter, tolerance=tolerance)
+        z, info = self._annotate(np.full(self.size, float(c[0])), info)
+        info.update(scalar_c=float(c[0]), scalar_b=b_s, scalar_a=a_s, scalar_curvature=c_s)
+        return z, info
 
 
 class Transaction:
